@@ -311,17 +311,17 @@
       }
 
       if (this.options.buttons.capture){
-        const btn = makeButton('capture', '📷', t(this.options.localization, 'capture', 'Capture'), ()=> this.capture()); btn.classList.add('vjs-ss-control-capture');
+        const btn = makeButton('capture', '📷', t(this.options.localization, 'capture', 'Capture'), ()=> this.capture());
         player.controlBar.el().insertBefore(btn, player.controlBar.fullscreenToggle.el());
       }
 
       if (this.options.buttons.controls){
-        const btn = makeButton('controls', '🎛️', t(this.options.localization, 'toggle_controls_panel', 'Toggle Controls Panel'), ()=> this.togglePanel()); btn.classList.add('vjs-ss-control-controls');
+        const btn = makeButton('controls', '🎛️', t(this.options.localization, 'toggle_controls_panel', 'Toggle Controls Panel'), ()=> this.togglePanel());
         player.controlBar.el().insertBefore(btn, player.controlBar.fullscreenToggle.el());
       }
 
       if (this.options.buttons.gallery){
-        const btn = makeButton('gallery', '🖼️', t(this.options.localization, 'toggle_gallery', 'Toggle Gallery'), ()=> this.toggleModal()); btn.classList.add('vjs-ss-control-gallery');
+        const btn = makeButton('gallery', '🖼️', t(this.options.localization, 'toggle_gallery', 'Toggle Gallery'), ()=> this.toggleModal());
         player.controlBar.el().insertBefore(btn, player.controlBar.fullscreenToggle.el());
       }
     }
@@ -340,6 +340,7 @@
 
       q('select[data-field="preset"]').value = this.options.filters.preset || 'none';
       q('input[data-field="customFilter"]').value = this.options.filters.custom || '';
+      this._applyLiveFilter();
       q('select[data-field="storageType"]').value = this.options.storage.type || 'browser';
       q('input[data-field="intervalMs"]').value = this.options.autocapture.intervalMs || 5000;
       q('select[data-field="format"]').value = this.options.capture.format || 'image/png';
@@ -349,8 +350,8 @@
 
       p.addEventListener('change', (e)=>{
         const t = e.target;
-        if (t.matches('select[data-field="preset"]')) this.options.filters.preset = t.value;
-        if (t.matches('input[data-field="customFilter"]')) this.options.filters.custom = t.value;
+        if (t.matches('select[data-field="preset"]')) { this.options.filters.preset = t.value; this._applyLiveFilter(); }
+        if (t.matches('input[data-field="customFilter"]')) { this.options.filters.custom = t.value; this._applyLiveFilter(); }
         if (t.matches('select[data-field="storageType"]')) this.options.storage.type = t.value;
         if (t.matches('input[data-field="intervalMs"]')) this.options.autocapture.intervalMs = Math.max(200, Number(t.value) || 5000);
         if (t.matches('select[data-field="format"]')) this.options.capture.format = t.value;
@@ -561,8 +562,8 @@
           case 'hkGallery': this.options.hotkeys.mapping.toggleGallery = tEl.value || 'KeyG'; break;
           case 'hkAuto': this.options.hotkeys.mapping.toggleAutoCapture = tEl.value || 'KeyI'; break;
           case 'hkExport': this.options.hotkeys.mapping.exportTimelapse = tEl.value || 'KeyE'; break;
-          case 'preset': this.options.filters.preset = tEl.value; break;
-          case 'custom': this.options.filters.custom = tEl.value; break;
+          case 'preset': this.options.filters.preset = tEl.value; this._applyLiveFilter(); break;
+          case 'custom': this.options.filters.custom = tEl.value; this._applyLiveFilter(); break;
           case 'storageType': this.options.storage.type = tEl.value; break;
           case 'httpEndpoint': this.options.storage.http.endpoint = tEl.value; break;
           case 'httpMethod': this.options.storage.http.method = tEl.value; break;
@@ -839,9 +840,19 @@
     }
 
     _showFullView(item){
-      this.modal.querySelector('[data-view="fullview"]').classList.add('show');
-      const img = this.modal.querySelector('[data-fv="image"]');
+      const fv = this.modal.querySelector('[data-view="fullview"]');
+      fv.classList.add('show');
+      const img = fv.querySelector('[data-fv="image"]');
       img.src = item.dataUrl; img.setAttribute('data-id', item.id);
+      // click outside to close
+      const handler = (e)=>{
+        const wrap = fv.querySelector('.canvas-wrap');
+        if (!wrap.contains(e.target)){
+          this._hideFullView();
+          fv.removeEventListener('click', handler);
+        }
+      };
+      setTimeout(()=> fv.addEventListener('click', handler));
     }
 
     _hideFullView(){ this.modal.querySelector('[data-view="fullview"]').classList.remove('show'); }
@@ -986,6 +997,23 @@
       base.src = imgEl.src;
       // clear drawing after apply
       this.state.annotationCtx.clearRect(0, 0, cnv.width, cnv.height);
+    }
+
+    _applyLiveFilter(){
+      const video = this.player.el().querySelector('video');
+      if (!video) return;
+      const filterMap = {
+        none: 'none',
+        grayscale: 'grayscale(100%)',
+        sepia: 'sepia(100%)',
+        invert: 'invert(100%)',
+        contrast: 'contrast(130%)',
+        saturate: 'saturate(140%)',
+        blur: 'blur(1px)'
+      };
+      const custom = (this.options.filters.custom || '').trim();
+      const value = custom ? custom : (filterMap[this.options.filters.preset] || 'none');
+      video.style.filter = value;
     }
   }
 
