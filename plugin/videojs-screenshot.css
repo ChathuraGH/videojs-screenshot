@@ -16,10 +16,17 @@
   justify-content: center;
   gap: 6px;
   padding: 0 10px !important;
+  border-radius: 8px;
+  border: 1px solid transparent;
 }
 .vjs-screenshot-btn .vjs-icon-placeholder::before {
   font-size: 16px;
 }
+/* Control bar specific styles */
+.vjs-screenshot-btn.vjs-ss-control-capture{ background: var(--vjs-ss-accent); color: #fff; }
+.vjs-screenshot-btn.vjs-ss-control-controls{ background: #374151; color: #e5e7eb; }
+.vjs-screenshot-btn.vjs-ss-control-gallery{ background: #0ea5e9; color: #001016; }
+.vjs-screenshot-btn:hover{ filter: brightness(1.05); }
 
 /* Small control panel (capture control model) */
 .vjs-ss-panel {
@@ -61,6 +68,9 @@
 .vjs-ss-panel .btn{ height: 32px; padding: 0 10px; border-radius: 8px; border: 1px solid var(--vjs-ss-border); background: #151821; color: var(--vjs-ss-fg); cursor: pointer; }
 .vjs-ss-panel .btn.primary{ background: var(--vjs-ss-accent); border-color: transparent; color: white; }
 .vjs-ss-panel .btn.danger{ background: var(--vjs-ss-danger); border-color: transparent; color: white; }
+.vjs-ss-panel .btn.success{ background: #10b981; border-color: transparent; color: white; }
+.vjs-ss-panel .btn.info{ background: #0ea5e9; border-color: transparent; color: #001016; }
+.vjs-ss-panel .btn.warning{ background: #f59e0b; border-color: transparent; color: #1b1100; }
 .vjs-ss-panel small.muted{ color: var(--vjs-ss-muted); font-size: 11px; }
 
 /* Selection overlay for crop */
@@ -114,6 +124,10 @@
 .vjs-ss-thumb img{ width: 100%; height: 100%; object-fit: cover; }
 .vjs-ss-item .vjs-ss-actions{ display: flex; justify-content: space-between; padding: 8px; gap: 6px; }
 .vjs-ss-item .btn{ padding: 6px 8px; font-size: 12px; border-radius: 8px; background: #151821; border: 1px solid var(--vjs-ss-border); color: var(--vjs-ss-fg); cursor: pointer; }
+.vjs-ss-item .btn.success{ background: #10b981; border-color: transparent; color: white; }
+.vjs-ss-item .btn.info{ background: #0ea5e9; border-color: transparent; color: #001016; }
+.vjs-ss-item .btn.warning{ background: #f59e0b; border-color: transparent; color: #1b1100; }
+.vjs-ss-item .btn.danger{ background: var(--vjs-ss-danger); border-color: transparent; color: white; }
 
 /* Full view */
 .vjs-ss-fullview{ display: none; position: absolute; inset: 0; background: rgba(0,0,0,0.85); z-index: 50; align-items: center; justify-content: center; }
@@ -122,6 +136,11 @@
 .vjs-ss-fullview canvas, .vjs-ss-fullview img{ max-width: 100%; max-height: 100%; display: block; }
 .vjs-ss-fullview .toolbar{ position: absolute; left: 50%; top: 12px; transform: translateX(-50%); display: flex; gap: 8px; }
 .vjs-ss-fullview .toolbar .btn{ padding: 8px 10px; border-radius: 8px; background: #141723; color: var(--vjs-ss-fg); border: 1px solid var(--vjs-ss-border); cursor: pointer; }
+.vjs-ss-fullview .toolbar .btn.success{ background: #10b981; border-color: transparent; color: white; }
+.vjs-ss-fullview .toolbar .btn.info{ background: #0ea5e9; border-color: transparent; color: #001016; }
+.vjs-ss-fullview .toolbar .btn.warning{ background: #f59e0b; border-color: transparent; color: #1b1100; }
+.vjs-ss-fullview .toolbar .btn.danger{ background: var(--vjs-ss-danger); border-color: transparent; color: white; }
+.vjs-ss-fullview .toolbar .btn.active{ box-shadow: 0 0 0 2px rgba(255,255,255,0.15) inset; }
 
 /* Settings tab */
 .vjs-ss-settings{ padding: 12px; overflow: auto; display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }

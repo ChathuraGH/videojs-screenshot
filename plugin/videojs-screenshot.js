@@ -311,17 +311,17 @@
       }
 
       if (this.options.buttons.capture){
-        const btn = makeButton('capture', '📷', t(this.options.localization, 'capture', 'Capture'), ()=> this.capture());
+        const btn = makeButton('capture', '📷', t(this.options.localization, 'capture', 'Capture'), ()=> this.capture()); btn.classList.add('vjs-ss-control-capture');
         player.controlBar.el().insertBefore(btn, player.controlBar.fullscreenToggle.el());
       }
 
       if (this.options.buttons.controls){
-        const btn = makeButton('controls', '🎛️', t(this.options.localization, 'toggle_controls_panel', 'Toggle Controls Panel'), ()=> this.togglePanel());
+        const btn = makeButton('controls', '🎛️', t(this.options.localization, 'toggle_controls_panel', 'Toggle Controls Panel'), ()=> this.togglePanel()); btn.classList.add('vjs-ss-control-controls');
         player.controlBar.el().insertBefore(btn, player.controlBar.fullscreenToggle.el());
       }
 
       if (this.options.buttons.gallery){
-        const btn = makeButton('gallery', '🖼️', t(this.options.localization, 'toggle_gallery', 'Toggle Gallery'), ()=> this.toggleModal());
+        const btn = makeButton('gallery', '🖼️', t(this.options.localization, 'toggle_gallery', 'Toggle Gallery'), ()=> this.toggleModal()); btn.classList.add('vjs-ss-control-gallery');
         player.controlBar.el().insertBefore(btn, player.controlBar.fullscreenToggle.el());
       }
     }
@@ -826,10 +826,10 @@
         const actions = createEl('div', 'vjs-ss-actions');
         const left = createEl('div'); left.style.display = 'flex'; left.style.gap = '6px';
         const right = createEl('div'); right.style.display = 'flex'; right.style.gap = '6px';
-        if (this.options.ui.gallery.buttons.download){ const b = createEl('button', 'btn'); b.textContent = t(this.options.localization, 'download', 'Download'); b.addEventListener('click', ()=> this._downloadItem(item)); left.appendChild(b); }
+        if (this.options.ui.gallery.buttons.download){ const b = createEl('button', 'btn success'); b.textContent = t(this.options.localization, 'download', 'Download'); b.addEventListener('click', ()=> this._downloadItem(item)); left.appendChild(b); }
         if (this.options.ui.gallery.buttons.edit){ const b = createEl('button', 'btn'); b.textContent = t(this.options.localization, 'edit', 'Edit'); b.addEventListener('click', ()=> this._showFullView(item)); left.appendChild(b); }
-        if (this.options.ui.gallery.buttons.share){ const b = createEl('button', 'btn'); b.textContent = t(this.options.localization, 'share', 'Share'); b.addEventListener('click', ()=> this._shareItem(item)); left.appendChild(b); }
-        if (this.options.ui.gallery.buttons.delete){ const b = createEl('button', 'btn'); b.textContent = t(this.options.localization, 'delete', 'Delete'); b.addEventListener('click', ()=> this._deleteItem(item)); right.appendChild(b); }
+        if (this.options.ui.gallery.buttons.share){ const b = createEl('button', 'btn info'); b.textContent = t(this.options.localization, 'share', 'Share'); b.addEventListener('click', ()=> this._shareItem(item)); left.appendChild(b); }
+        if (this.options.ui.gallery.buttons.delete){ const b = createEl('button', 'btn danger'); b.textContent = t(this.options.localization, 'delete', 'Delete'); b.addEventListener('click', ()=> this._deleteItem(item)); right.appendChild(b); }
         actions.appendChild(left); actions.appendChild(right);
         card.appendChild(actions);
 
@@ -909,16 +909,16 @@
       const tb = this.modal.querySelector('[data-fv="toolbar"]');
       if (!tb) return;
       tb.innerHTML = '';
-      const add = (key, labelKey, handler)=>{
-        const b = createEl('button', 'btn'); b.textContent = t(this.options.localization, labelKey, labelKey.replace('_',' ')); b.addEventListener('click', handler); tb.appendChild(b);
+      const add = (key, labelKey, handler, cls='btn')=>{
+        const b = createEl('button', cls); b.textContent = t(this.options.localization, labelKey, labelKey.replace('_',' ')); b.addEventListener('click', handler); tb.appendChild(b);
       };
       const cfg = this.options.ui.fullview.buttons;
-      if (cfg.download) add('download', 'download', ()=> this._fullviewDownload());
-      if (cfg.delete) add('delete', 'delete', ()=> this._fullviewDelete());
-      if (cfg.copy) add('copy', 'copy', ()=> this._fullviewCopy());
-      if (cfg.share) add('share', 'share', ()=> this._fullviewShare());
-      if (cfg.annotate) add('annotate', 'annotate', ()=> this._toggleAnnotate());
-      if (cfg.close) add('close', 'close', ()=> this._hideFullView());
+      if (cfg.download) add('download', 'download', ()=> this._fullviewDownload(), 'btn success');
+      if (cfg.delete) add('delete', 'delete', ()=> this._fullviewDelete(), 'btn danger');
+      if (cfg.copy) add('copy', 'copy', ()=> this._fullviewCopy(), 'btn');
+      if (cfg.share) add('share', 'share', ()=> this._fullviewShare(), 'btn info');
+      if (cfg.annotate) add('annotate', 'annotate', ()=> this._toggleAnnotate(), 'btn warning');
+      if (cfg.close) add('close', 'close', ()=> this._hideFullView(), 'btn');
     }
 
     _ensureAnnotationOverlay(){
